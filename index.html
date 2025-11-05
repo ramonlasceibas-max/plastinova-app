@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -795,6 +796,10 @@
                     <div class="form-group" id="customer-name-group">
                         <label class="form-label" for="customer-name">Nombre del Cliente *</label>
                         <input type="text" id="customer-name" class="form-control" placeholder="Ingresa tu nombre completo" required onchange="checkCustomerDiscount()">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Nombre del Negocio/Tienda (Opcional)</label>
+                            <input type="text" id="customer-business" class="form-control" placeholder="Ej: Ferretería El Sol">
                     </div>
 
                     <div class="form-group" id="customer-phone-group">
@@ -917,6 +922,10 @@
                             <div class="form-group">
                                 <label class="form-label">Nombre del Cliente</label>
                                 <input type="text" id="new-customer-name" class="form-control" placeholder="Nombre completo">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Nombre del Negocio/Tienda</label>
+                            <input type="text" id="new-customer-business" class="form-control" placeholder="Ej: Ferretería El Sol">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Teléfono</label>
@@ -3059,88 +3068,114 @@
         // Iniciar aplicación
         init();
     
-        // Librería jsPDF para generación de PDFs (versión embebida simplificada)
-        function generateInvoice(order, customer, isInvoice = false) {
-            const doc = {
-                lines: [],
-                addLine: function(text) { this.lines.push(text); }
-            };
+        
+        // ==========================================
+        // SISTEMA DE FILTRADO DE CLIENTES POR VENDEDOR
+        // ==========================================
 
+        function getAssignedCustomers(sellerPhone) {
+            if (!sellerPhone) return customers;
+            return customers.filter(c => c.assignedSeller === sellerPhone || !c.assignedSeller);
+        }
+
+        function getUnassignedCustomers() {
+            return customers.filter(c => !c.assignedSeller);
+        }
+
+        function reassignCustomer(customerId, newSellerPhone) {
+            const customer = customers.find(c => c.id === customerId);
+            if (customer) {
+                customer.assignedSeller = newSellerPhone;
+                saveData();
+                alert('Cliente reasignado exitosamente');
+                renderCustomersAdmin();
+            }
+        }
+
+        // ==========================================
+        // SISTEMA DE FACTURAS Y NOTAS DE REMISIÓN
+        // ==========================================
+
+        function generateInvoice(order, customer, isInvoice = false) {
+            const doc = [];
             const folio = 'PLAST-' + order.id;
             const fecha = new Date(order.date).toLocaleDateString('es-MX');
+            const vendedor = order.seller || sellers.find(s => s.phone === customer.assignedSeller)?.name || 'N/A';
 
             // Encabezado
-            doc.addLine('========================================');
-            doc.addLine('         TINACOS PLASTINOVA');
-            doc.addLine('     Elaborado con los más altos');
-            doc.addLine('      estándares de calidad');
-            doc.addLine('========================================');
-            doc.addLine('');
-            doc.addLine(isInvoice ? '           FACTURA' : '      NOTA DE REMISIÓN');
-            doc.addLine('');
-            doc.addLine('Folio: ' + folio);
-            doc.addLine('Fecha: ' + fecha);
-            doc.addLine('');
-            doc.addLine('----------------------------------------');
-            doc.addLine('DATOS FISCALES:');
-            doc.addLine('RFC: XAXX010101000');
-            doc.addLine('Carretera estatal 601, 62747');
-            doc.addLine('La Mojonera, Morelos');
-            doc.addLine('Tel: 563-625-9982');
-            doc.addLine('----------------------------------------');
-            doc.addLine('');
-            doc.addLine('CLIENTE:');
-            doc.addLine('Nombre: ' + customer.name);
+            doc.push('========================================');
+            doc.push('         TINACOS PLASTINOVA');
+            doc.push('     Elaborado con los más altos');
+            doc.push('      estándares de calidad');
+            doc.push('========================================');
+            doc.push('');
+            doc.push(isInvoice ? '           FACTURA' : '      NOTA DE REMISIÓN');
+            doc.push('');
+            doc.push('Folio: ' + folio);
+            doc.push('Fecha: ' + fecha);
+            doc.push('');
+            doc.push('----------------------------------------');
+            doc.push('DATOS FISCALES:');
+            doc.push('RFC: XAXX010101000');
+            doc.push('Carretera estatal 601, 62747');
+            doc.push('La Mojonera, Morelos');
+            doc.push('Tel: 563-625-9982');
+            doc.push('----------------------------------------');
+            doc.push('');
+            doc.push('CLIENTE:');
+            doc.push('Nombre: ' + customer.name);
             if (customer.businessName) {
-                doc.addLine('Negocio: ' + customer.businessName);
+                doc.push('Negocio: ' + customer.businessName);
             }
-            doc.addLine('Teléfono: ' + customer.phone);
+            doc.push('Teléfono: ' + customer.phone);
             if (customer.email) {
-                doc.addLine('Email: ' + customer.email);
+                doc.push('Email: ' + customer.email);
             }
-            doc.addLine('');
-            doc.addLine('========================================');
-            doc.addLine('PRODUCTOS');
-            doc.addLine('========================================');
+            doc.push('');
+            doc.push('========================================');
+            doc.push('PRODUCTOS');
+            doc.push('========================================');
 
             let subtotal = 0;
             order.items.forEach(item => {
                 const product = products.find(p => p.id === item.productId);
                 if (product) {
-                    doc.addLine('');
-                    doc.addLine(product.name);
-                    doc.addLine('Cantidad: ' + item.quantity + ' x $' + product.price.toFixed(2));
+                    doc.push('');
+                    doc.push(product.name);
+                    doc.push('Cantidad: ' + item.quantity + ' x $' + product.price.toFixed(2));
                     const itemTotal = item.quantity * product.price;
-                    doc.addLine('Subtotal: $' + itemTotal.toFixed(2));
+                    doc.push('Subtotal: $' + itemTotal.toFixed(2));
                     subtotal += itemTotal;
                 }
             });
 
-            doc.addLine('');
-            doc.addLine('========================================');
-            doc.addLine('TOTALES');
-            doc.addLine('========================================');
-            doc.addLine('Subtotal: $' + subtotal.toFixed(2));
+            doc.push('');
+            doc.push('========================================');
+            doc.push('TOTALES');
+            doc.push('========================================');
+            doc.push('Subtotal: $' + subtotal.toFixed(2));
 
             if (isInvoice) {
                 const iva = subtotal * 0.16;
                 const total = subtotal + iva;
-                doc.addLine('IVA (16%): $' + iva.toFixed(2));
-                doc.addLine('TOTAL: $' + total.toFixed(2));
+                doc.push('IVA (16%): $' + iva.toFixed(2));
+                doc.push('----------------------------------------');
+                doc.push('TOTAL: $' + total.toFixed(2));
             } else {
-                doc.addLine('TOTAL: $' + subtotal.toFixed(2));
+                doc.push('----------------------------------------');
+                doc.push('TOTAL: $' + subtotal.toFixed(2));
             }
 
-            doc.addLine('');
-            doc.addLine('========================================');
-            doc.addLine('');
-            doc.addLine('Vendedor: ' + (order.seller || 'N/A'));
-            doc.addLine('');
-            doc.addLine('Gracias por su preferencia');
-            doc.addLine('');
-            doc.addLine('========================================');
+            doc.push('');
+            doc.push('========================================');
+            doc.push('');
+            doc.push('Vendedor: ' + vendedor);
+            doc.push('');
+            doc.push('Gracias por su preferencia');
+            doc.push('');
+            doc.push('========================================');
 
-            return doc.lines.join('\n');
+            return doc.join('\n');
         }
 
         function downloadDocument(content, filename) {
@@ -3150,6 +3185,27 @@
             link.download = filename;
             link.click();
             URL.revokeObjectURL(link.href);
+        }
+
+        function generateInvoiceForOrder(orderId, isInvoice) {
+            const order = orders.find(o => o.id === orderId);
+            if (!order) {
+                alert('Pedido no encontrado');
+                return;
+            }
+
+            const customer = customers.find(c => c.name === order.customerName);
+            if (!customer) {
+                alert('Cliente no encontrado');
+                return;
+            }
+
+            const docType = isInvoice ? 'Factura' : 'Nota';
+            const content = generateInvoice(order, customer, isInvoice);
+            const filename = `${docType}_${order.id}_${customer.name.replace(/\s+/g, '_')}.txt`;
+
+            downloadDocument(content, filename);
+            alert(`${docType} generada exitosamente`);
         }
 
     </script>
