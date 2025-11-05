@@ -1452,6 +1452,7 @@
 
         function registerCustomer() {
             const name = document.getElementById('new-customer-name').value.trim();
+            const businessName = document.getElementById('new-customer-business').value.trim();
             const phone = document.getElementById('new-customer-phone').value.trim();
             const email = document.getElementById('new-customer-email').value.trim();
             const discountType = document.getElementById('new-customer-discount-type').value;
@@ -3057,6 +3058,100 @@
 
         // Iniciar aplicación
         init();
+    
+        // Librería jsPDF para generación de PDFs (versión embebida simplificada)
+        function generateInvoice(order, customer, isInvoice = false) {
+            const doc = {
+                lines: [],
+                addLine: function(text) { this.lines.push(text); }
+            };
+
+            const folio = 'PLAST-' + order.id;
+            const fecha = new Date(order.date).toLocaleDateString('es-MX');
+
+            // Encabezado
+            doc.addLine('========================================');
+            doc.addLine('         TINACOS PLASTINOVA');
+            doc.addLine('     Elaborado con los más altos');
+            doc.addLine('      estándares de calidad');
+            doc.addLine('========================================');
+            doc.addLine('');
+            doc.addLine(isInvoice ? '           FACTURA' : '      NOTA DE REMISIÓN');
+            doc.addLine('');
+            doc.addLine('Folio: ' + folio);
+            doc.addLine('Fecha: ' + fecha);
+            doc.addLine('');
+            doc.addLine('----------------------------------------');
+            doc.addLine('DATOS FISCALES:');
+            doc.addLine('RFC: XAXX010101000');
+            doc.addLine('Carretera estatal 601, 62747');
+            doc.addLine('La Mojonera, Morelos');
+            doc.addLine('Tel: 563-625-9982');
+            doc.addLine('----------------------------------------');
+            doc.addLine('');
+            doc.addLine('CLIENTE:');
+            doc.addLine('Nombre: ' + customer.name);
+            if (customer.businessName) {
+                doc.addLine('Negocio: ' + customer.businessName);
+            }
+            doc.addLine('Teléfono: ' + customer.phone);
+            if (customer.email) {
+                doc.addLine('Email: ' + customer.email);
+            }
+            doc.addLine('');
+            doc.addLine('========================================');
+            doc.addLine('PRODUCTOS');
+            doc.addLine('========================================');
+
+            let subtotal = 0;
+            order.items.forEach(item => {
+                const product = products.find(p => p.id === item.productId);
+                if (product) {
+                    doc.addLine('');
+                    doc.addLine(product.name);
+                    doc.addLine('Cantidad: ' + item.quantity + ' x $' + product.price.toFixed(2));
+                    const itemTotal = item.quantity * product.price;
+                    doc.addLine('Subtotal: $' + itemTotal.toFixed(2));
+                    subtotal += itemTotal;
+                }
+            });
+
+            doc.addLine('');
+            doc.addLine('========================================');
+            doc.addLine('TOTALES');
+            doc.addLine('========================================');
+            doc.addLine('Subtotal: $' + subtotal.toFixed(2));
+
+            if (isInvoice) {
+                const iva = subtotal * 0.16;
+                const total = subtotal + iva;
+                doc.addLine('IVA (16%): $' + iva.toFixed(2));
+                doc.addLine('TOTAL: $' + total.toFixed(2));
+            } else {
+                doc.addLine('TOTAL: $' + subtotal.toFixed(2));
+            }
+
+            doc.addLine('');
+            doc.addLine('========================================');
+            doc.addLine('');
+            doc.addLine('Vendedor: ' + (order.seller || 'N/A'));
+            doc.addLine('');
+            doc.addLine('Gracias por su preferencia');
+            doc.addLine('');
+            doc.addLine('========================================');
+
+            return doc.lines.join('\n');
+        }
+
+        function downloadDocument(content, filename) {
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            link.click();
+            URL.revokeObjectURL(link.href);
+        }
+
     </script>
 
     <footer class="footer">
