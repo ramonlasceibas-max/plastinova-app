@@ -390,7 +390,7 @@
         function eliminarProductoAdmin(idx) { productos.splice(idx, 1); mostrarNotification('❌ Producto eliminado'); showAdminSection('productos'); }
         function eliminarPedidoAdmin(idx) { pedidos.splice(idx, 1); mostrarNotification('❌ Pedido eliminado'); showAdminSection('pedidos'); }
         function eliminarClienteAdmin(idx) { clientesGlobal.splice(idx, 1); mostrarNotification('❌ Cliente eliminado'); showAdminSection('clientes'); }
-        function eliminarVenta(idx) { if (ventas.length > idx) { ventas.splice(idx, 1); } mostrarNotification('❌ Venta eliminada'); showAdminSection('ventas'); }
+        function eliminarVenta(idx) { ventas.splice(idx, 1); mostrarNotification('❌ Venta eliminada'); showAdminSection('ventas'); }
         function aplicarDescuentoDirecto(event) { event.preventDefault(); mostrarNotification('✅ Descuento aplicado'); }
         function descargarReportePDF() { mostrarNotification('📄 PDF descargado'); }
         function descargarReporteExcel() { mostrarNotification('📊 Excel descargado'); }
