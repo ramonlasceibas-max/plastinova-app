@@ -8,14 +8,14 @@
     <title>🏪 TINACOS PLASTINOVA - Soluciones Premium</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', sans-serif; background: #f8fafc; color: #1e293b; min-height: 100vh; display: flex; flex-direction: column; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f8fafc; color: #1e293b; }
         .navbar { background: linear-gradient(135deg, #003f7f 0%, #1e3a8a 100%); color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
         .navbar-brand { display: flex; align-items: center; gap: 1rem; font-size: 1.5rem; font-weight: bold; }
         .navbar-logo { width: 50px; height: 50px; border-radius: 8px; background: white; padding: 3px; object-fit: contain; }
         .navbar-right { display: flex; gap: 1rem; align-items: center; }
         .carrito-icon { font-size: 1.5rem; cursor: pointer; }
         .carrito-contador { background: #dc2626; color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; flex: 1; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
         .content { display: none; }
         .content.active { display: block; }
         .btn { background: #003f7f; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer; transition: 0.3s; font-size: 1rem; }
@@ -83,10 +83,6 @@
         .precio-total { font-size: 1.5rem; font-weight: bold; color: #003f7f; border-top: 2px solid #e2e8f0; padding-top: 1rem; margin-top: 1rem; }
         .info-campo { background: #f1f5f9; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; }
         .info-campo strong { color: #003f7f; }
-        .footer { background: #003f7f; color: white; text-align: center; padding: 2rem 1rem; margin-top: 3rem; }
-        .footer strong { font-size: 1.2rem; }
-        .footer a { color: white; text-decoration: underline; }
-        .footer-section { margin: 0.8rem 0; }
         @media (max-width: 768px) { .navbar { flex-direction: column; gap: 1rem; } .hero h1 { font-size: 2rem; } .button-group { flex-direction: column; } .button-group .btn { width: 100%; } .grid-products { grid-template-columns: 1fr; } .dos-columnas { grid-template-columns: 1fr; } }
     </style>
 </head>
@@ -174,7 +170,7 @@
                     <h3 class="section-title">📋 Mis Pedidos</h3>
                     <div class="table-container">
                         <table>
-                            <thead><tr><th>Pedido</th><th>Total</th><th>Tipo Entrega</th><th>Vendedor | Teléfono</th><th>Fecha</th></tr></thead>
+                            <thead><tr><th>Pedido</th><th>Total</th><th>Tipo Entrega</th><th>Vendedor</th><th>Fecha</th></tr></thead>
                             <tbody id="historial-tabla"></tbody>
                         </table>
                     </div>
@@ -313,25 +309,6 @@
         </div>
     </div>
 
-    <!-- FOOTER INFORMACIÓN DE LA EMPRESA -->
-    <footer class="footer">
-        <div class="footer-section">
-            <strong>TINACOS PLASTINOVA S.A. de C.V.</strong><br>
-            💧 Soluciones Premium de Almacenamiento de Agua 💧
-        </div>
-        <div class="footer-section">
-            📍 Carretera El Salto - La Capilla Km. 2.5, El Salto, Jalisco<br>
-            📞 Teléfonos: <a href="tel:7775146927">777 5146927</a> / <a href="tel:7775347617">777 5347617</a> / <a href="tel:5613420821">561 3420821</a> / <a href="tel:7771636393">777 1636393</a><br>
-            📧 Correo: <a href="mailto:contacto@tinacosplastinova.com">contacto@tinacosplastinova.com</a>
-        </div>
-        <div class="footer-section">
-            ⏰ Horario de atención: Lunes a Sábado de 9:00 a 18:00 hrs
-        </div>
-        <div style="margin-top: 1rem; color: #eeeeee; font-size: 0.9rem;">
-            © 2025 TINACOS PLASTINOVA. Todos los derechos reservados.
-        </div>
-    </footer>
-
     <script>
         const productos = [
             { id: 1, nombre: 'Tambo 235 lt', capacidad: 235, precio: 520, tipo: 'tambo', foto: '', colores: { beige: '#D4A574', blanco: '#FFFFFF', negro: '#000000', azul: '#003B7F', rojo: '#DC2626', verde: '#10B981', naranja: '#F97316', granito: '#808080' } },
@@ -340,10 +317,10 @@
             { id: 4, nombre: 'Tinaco 1200 lt', capacidad: 1200, precio: 1600, tipo: 'tinaco', foto: '', colores: { beige: '#D4A574', blanco: '#FFFFFF', negro: '#000000', rojo: '#DC2626', verde: '#10B981', naranja: '#F97316', café: '#8B4513', granito: '#808080' } }
         ];
         const vendedoresData = [
-            { usuario: 'husai.mendez', password: 'Husai2024*', nombre: 'Husai M.', telefono: '777 5146927' },
-            { usuario: 'pedro.delgado', password: 'Pedro2024*', nombre: 'Pedro D.', telefono: '777 5347617' },
-            { usuario: 'fernando.ocampo', password: 'Fernando2024*', nombre: 'Fernando O.', telefono: '561 3420821' },
-            { usuario: 'isidro.gonzalez', password: 'Isidro2024*', nombre: 'Isidro G.', telefono: '777 1636393' }
+            { usuario: 'husai.mendez', password: 'Husai2024*', nombre: 'Husai M.' },
+            { usuario: 'pedro.delgado', password: 'Pedro2024*', nombre: 'Pedro D.' },
+            { usuario: 'fernando.ocampo', password: 'Fernando2024*', nombre: 'Fernando O.' },
+            { usuario: 'isidro.gonzalez', password: 'Isidro2024*', nombre: 'Isidro G.' }
         ];
         const admin = { usuario: 'admin.plastinova', password: 'Admin2024*Plastinova', nombre: 'Administrador' };
         let usuarioActual = null, carrito = [], colorSeleccionado = {}, pedidos = [], usuariosRegistrados = [], carritoCliente = [], clientesGlobal = [], notasFacturas = [];
@@ -361,7 +338,7 @@
         function cerrarCambiarPassword() { document.getElementById('cambiar-password-modal').classList.remove('active'); }
         function cambiarPassword(event) { event.preventDefault(); const nueva = document.getElementById('pass-nueva').value; const confirmar = document.getElementById('pass-confirmar').value; if (nueva !== confirmar) { mostrarNotification('Las contraseñas no coinciden', true); return; } if (nueva.length < 6) { mostrarNotification('Mínimo 6 caracteres', true); return; } mostrarNotification('✅ Contraseña cambiada'); cerrarCambiarPassword(); }
         function mostrarCatalogo() { document.getElementById('titulo-cliente').textContent = 'Catálogo de Productos'; document.getElementById('productos-grid').style.display = 'grid'; document.getElementById('historial-container').style.display = 'none'; document.getElementById('notas-container').style.display = 'none'; }
-        function mostrarHistorial() { document.getElementById('titulo-cliente').textContent = 'Mis Pedidos'; document.getElementById('productos-grid').style.display = 'none'; document.getElementById('historial-container').style.display = 'block'; document.getElementById('notas-container').style.display = 'none'; const vendedorObj = vendedoresData.find(v => v.nombre === usuarioActual.vendedor); const telefonoVendedor = vendedorObj ? vendedorObj.telefono : 'N/A'; document.getElementById('historial-tabla').innerHTML = carritoCliente.length === 0 ? '<tr><td colspan="5">No hay pedidos</td></tr>' : carritoCliente.map(p => { const vObj = vendedoresData.find(v => v.nombre === p.vendedor); const tel = vObj ? vObj.telefono : 'N/A'; return `<tr><td>${p.numero}</td><td>$${p.total}</td><td>${p.tipoEntrega === 'domicilio' ? '🚚' : p.tipoEntrega === 'tienda' ? '🏪' : '📦'}</td><td>${p.vendedor} | ${tel}</td><td>${p.fecha}</td></tr>`; }).join(''); }
+        function mostrarHistorial() { document.getElementById('titulo-cliente').textContent = 'Mis Pedidos'; document.getElementById('productos-grid').style.display = 'none'; document.getElementById('historial-container').style.display = 'block'; document.getElementById('notas-container').style.display = 'none'; document.getElementById('historial-tabla').innerHTML = carritoCliente.length === 0 ? '<tr><td colspan="5">No hay pedidos</td></tr>' : carritoCliente.map(p => `<tr><td>${p.numero}</td><td>$${p.total}</td><td>${p.tipoEntrega === 'domicilio' ? '🚚' : p.tipoEntrega === 'tienda' ? '🏪' : '📦'}</td><td>${p.vendedor}</td><td>${p.fecha}</td></tr>`).join(''); }
         function mostrarNotasCliente() { document.getElementById('titulo-cliente').textContent = 'Mis Notas y Facturas'; document.getElementById('productos-grid').style.display = 'none'; document.getElementById('historial-container').style.display = 'none'; document.getElementById('notas-container').style.display = 'block'; const misNotas = notasFacturas.filter(n => n.cliente === usuarioActual.nombre); document.getElementById('notas-tabla').innerHTML = misNotas.length === 0 ? '<tr><td colspan="5">No hay notas o facturas</td></tr>' : misNotas.map(n => `<tr><td>${n.tipo}</td><td>${n.numero}</td><td>${n.pedido}</td><td>$${n.total}</td><td>${n.fecha}</td></tr>`).join(''); }
         function mostrarProductos() { const grid = document.getElementById('productos-grid'); grid.innerHTML = productos.map(p => `<div class="product-card"><div class="product-image" style="background: ${p.foto ? `url(${p.foto})` : `linear-gradient(135deg, #003f7f 0%, #${p.tipo === 'tambo' ? 'F97316' : 'DC2626'} 100%)`}; background-size: cover;"><span style="background: rgba(0,0,0,0.5); padding: 1rem; border-radius: 8px;">${p.tipo === 'tambo' ? '🛢️' : '💧'}</span></div><div class="product-info"><div class="product-name">${p.nombre}</div><div class="product-capacity">Capacidad: ${p.capacidad} lt</div><div class="product-price">$${p.precio}</div><div class="color-selector"><div class="color-label">Color:</div><div class="color-options" id="colores-${p.id}">${Object.entries(p.colores).map(([nombre, hex]) => `<button type="button" class="color-btn" style="background-color: ${hex};" title="${nombre}" onclick="selectColor(${p.id}, '${nombre}')" id="color-${p.id}-${nombre}"></button>`).join('')}</div></div><div class="quantity-selector"><button type="button" class="quantity-btn" onclick="cambiarCantidad(${p.id}, -1)">-</button><input type="number" class="quantity-input" id="qty-${p.id}" value="1" min="1"><button type="button" class="quantity-btn" onclick="cambiarCantidad(${p.id}, 1)">+</button></div><button type="button" class="btn" style="width: 100%;" onclick="agregarAlCarrito(${p.id})">➕ Agregar</button></div></div>`).join(''); showContent('comprador-dashboard'); }
         function selectColor(productId, colorNombre) { colorSeleccionado[productId] = colorNombre; document.querySelectorAll(`#colores-${productId} .color-btn`).forEach(btn => btn.classList.remove('selected')); document.getElementById(`color-${productId}-${colorNombre}`).classList.add('selected'); mostrarNotification('✅ Color: ' + colorNombre); }
